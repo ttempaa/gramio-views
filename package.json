@@ -33,8 +33,9 @@
 	"files": ["dist"],
 	"license": "MIT",
 	"devDependencies": {
-		"@biomejs/biome": "^1.9.4",
+		"@biomejs/biome": "^2.1.1",
 		"@types/bun": "^1.2.8",
+		"gramio": "^0.4.9",
 		"pkgroll": "^2.11.2",
 		"typescript": "^5.8.2"
 	},
