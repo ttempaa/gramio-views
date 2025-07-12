@@ -1,14 +1,16 @@
 import type { APIMethodParams } from "gramio";
 
+type Text = string | { toString(): string };
+
 export class ResponseView {
 	private readonly response = {
-		text: undefined as string | undefined,
+		text: undefined as Text | undefined,
 		keyboard: undefined as
 			| APIMethodParams<"sendMessage">["reply_markup"]
 			| undefined,
 	};
 
-	text(text: string) {
+	text(text: Text) {
 		this.response.text = text;
 
 		return this;

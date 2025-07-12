@@ -1,27 +1,26 @@
 {
 	"name": "@gramio/views",
-	"version": "0.0.1",
-	"description": "server-side parser for telegram init-data",
-	"keywords": [
-		"gramio",
-		"telegram",
-		"views",
-		"tma",
-		"webapp"
-	],
-	"homepage": "https://github.com/gramiojs/views",
-	"readme": "https://github.com/gramiojs/views",
-	"repository": {
-		"type": "git",
-		"url": "git+https://github.com/gramiojs/views.git"
-	},
+	"version": "0.0.2",
 	"author": {
 		"url": "https://github.com/kravetsone",
 		"name": "kravets"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/gramiojs/views.git"
+	},
 	"main": "./dist/index.cjs",
 	"module": "./dist/index.js",
-	"types": "./dist/index.d.ts",
+	"devDependencies": {
+		"@biomejs/biome": "^2.1.1",
+		"@types/bun": "^1.2.18",
+		"gramio": "^0.4.10",
+		"pkgroll": "^2.14.1",
+		"typescript": "^5.8.3"
+	},
+	"peerDependencies": {
+		"gramio": "^0.4.10"
+	},
 	"exports": {
 		"import": {
 			"types": "./dist/index.d.ts",
@@ -32,22 +31,23 @@
 			"default": "./dist/index.cjs"
 		}
 	},
+	"description": "server-side parser for telegram init-data",
+	"files": [
+		"dist"
+	],
+	"homepage": "https://github.com/gramiojs/views",
+	"keywords": [
+		"gramio",
+		"telegram",
+		"views",
+		"tma",
+		"webapp"
+	],
+	"license": "MIT",
+	"readme": "https://github.com/gramiojs/views",
 	"scripts": {
 		"prepublishOnly": "bunx pkgroll"
 	},
 	"type": "module",
-	"files": [
-		"dist"
-	],
-	"license": "MIT",
-	"devDependencies": {
-		"@biomejs/biome": "^2.1.1",
-		"@types/bun": "^1.2.18",
-		"gramio": "^0.4.10",
-		"pkgroll": "^2.14.1",
-		"typescript": "^5.8.3"
-	},
-	"dependencies": {
-		"@gramio/types": "^9.1.3"
-	}
+	"types": "./dist/index.d.ts"
 }
