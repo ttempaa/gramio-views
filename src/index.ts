@@ -10,9 +10,9 @@ export function initViewsBuilder<
 		return builder;
 	};
 
-	returnResult.buildRender = (globals) => {
+	returnResult.buildRender = (context, globals) => {
 		return (viewRender, ...args) => {
-			return viewRender.renderWithContext(globals, args);
+			return viewRender.renderWithContext(context, globals, args);
 		};
 	};
 

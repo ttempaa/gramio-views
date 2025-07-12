@@ -2,7 +2,13 @@
 	"name": "@gramio/views",
 	"version": "0.0.1",
 	"description": "server-side parser for telegram init-data",
-	"keywords": ["gramio", "telegram", "views", "tma", "webapp"],
+	"keywords": [
+		"gramio",
+		"telegram",
+		"views",
+		"tma",
+		"webapp"
+	],
 	"homepage": "https://github.com/gramiojs/views",
 	"readme": "https://github.com/gramiojs/views",
 	"repository": {
@@ -30,16 +36,18 @@
 		"prepublishOnly": "bunx pkgroll"
 	},
 	"type": "module",
-	"files": ["dist"],
+	"files": [
+		"dist"
+	],
 	"license": "MIT",
 	"devDependencies": {
 		"@biomejs/biome": "^2.1.1",
-		"@types/bun": "^1.2.8",
-		"gramio": "^0.4.9",
-		"pkgroll": "^2.11.2",
-		"typescript": "^5.8.2"
+		"@types/bun": "^1.2.18",
+		"gramio": "^0.4.10",
+		"pkgroll": "^2.14.1",
+		"typescript": "^5.8.3"
 	},
 	"dependencies": {
-		"@gramio/types": "^9.0.1"
+		"@gramio/types": "^9.1.3"
 	}
 }
