@@ -1,4 +1,4 @@
-import type { BotLike, Context } from "gramio";
+import type { BotLike, ContextType } from "gramio";
 import { ResponseView } from "./response.ts";
 import type { WithResponseContext } from "./utils.ts";
 
@@ -13,9 +13,10 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 	) {}
 
 	async renderWithContext(
-		context: Context<BotLike>,
+		context: ContextType<BotLike, "message" | "callback_query">,
 		globals: Globals,
 		args: Args,
+		strategyRaw?: "send" | "edit",
 	) {
 		const contextData = this.createContext(globals);
 
@@ -23,18 +24,25 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 
 		const response = result[responseKey];
 
-		if (context.is("message")) {
-			if (response.text) {
-				await context.send(response.text, {
-					reply_markup: response.keyboard,
-				});
-			}
-		} else if (context.is("callback_query")) {
+		const strategy = strategyRaw ?? (context.is("message") ? "send" : "edit");
+
+		if (strategy === "send") {
 			if (response.text) {
 				const builtKeyboard =
 					response.keyboard && "toJSON" in response.keyboard
 						? response.keyboard.toJSON()
-						: undefined;
+						: response.keyboard;
+
+				await context.send(response.text, {
+					reply_markup: builtKeyboard,
+				});
+			}
+		} else if (strategy === "edit" && context.is("callback_query")) {
+			if (response.text) {
+				const builtKeyboard =
+					response.keyboard && "toJSON" in response.keyboard
+						? response.keyboard.toJSON()
+						: response.keyboard;
 
 				await context.editText(response.text, {
 					reply_markup:

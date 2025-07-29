@@ -11,9 +11,25 @@ export function initViewsBuilder<
 	};
 
 	returnResult.buildRender = (context, globals) => {
-		return (viewRender, ...args) => {
+		const render: ReturnType<InitViewsBuilderReturn<Globals>["buildRender"]> = (
+			viewRender,
+			...args
+		) => {
+			// @ts-expect-error
 			return viewRender.renderWithContext(context, globals, args);
 		};
+
+		render.send = (viewRender, ...args) => {
+			// @ts-expect-error
+			return viewRender.renderWithContext(context, globals, args, "send");
+		};
+
+		render.edit = (viewRender, ...args) => {
+			// @ts-expect-error
+			return viewRender.renderWithContext(context, globals, args, "edit");
+		};
+
+		return render;
 	};
 
 	return returnResult;

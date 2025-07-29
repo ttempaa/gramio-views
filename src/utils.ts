@@ -24,8 +24,20 @@ export interface InitViewsBuilderReturn<Globals extends object> {
 	buildRender: (
 		context: Context<BotLike>,
 		globals: Globals,
-	) => <View extends ViewRender<any, any>>(
-		view: View,
-		...args: ExtractViewArgs<View>
-	) => void;
+	) => {
+		<View extends ViewRender<any, any>>(
+			view: View,
+			...args: ExtractViewArgs<View>
+		): void;
+
+		send: <View extends ViewRender<any, any>>(
+			view: View,
+			...args: ExtractViewArgs<View>
+		) => void;
+
+		edit: <View extends ViewRender<any, any>>(
+			view: View,
+			...args: ExtractViewArgs<View>
+		) => void;
+	};
 }
