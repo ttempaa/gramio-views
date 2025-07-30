@@ -33,7 +33,7 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 						? response.keyboard.toJSON()
 						: response.keyboard;
 
-				await context.send(response.text, {
+				return await context.send(response.text, {
 					reply_markup: builtKeyboard,
 				});
 			}
@@ -44,7 +44,7 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 						? response.keyboard.toJSON()
 						: response.keyboard;
 
-				await context.editText(response.text, {
+				return await context.editText(response.text, {
 					reply_markup:
 						builtKeyboard && "inline_keyboard" in builtKeyboard
 							? builtKeyboard

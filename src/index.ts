@@ -11,6 +11,7 @@ export function initViewsBuilder<
 	};
 
 	returnResult.buildRender = (context, globals) => {
+		// @ts-expect-error
 		const render: ReturnType<InitViewsBuilderReturn<Globals>["buildRender"]> = (
 			viewRender,
 			...args
@@ -19,11 +20,13 @@ export function initViewsBuilder<
 			return viewRender.renderWithContext(context, globals, args);
 		};
 
+		// @ts-expect-error
 		render.send = (viewRender, ...args) => {
 			// @ts-expect-error
 			return viewRender.renderWithContext(context, globals, args, "send");
 		};
 
+		// @ts-expect-error
 		render.edit = (viewRender, ...args) => {
 			// @ts-expect-error
 			return viewRender.renderWithContext(context, globals, args, "edit");

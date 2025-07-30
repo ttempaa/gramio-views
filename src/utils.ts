@@ -1,4 +1,4 @@
-import type { BotLike, Context } from "gramio";
+import type { BotLike, Context, ContextType } from "gramio";
 import type { ViewRender } from "./render.ts";
 import type { ResponseView } from "./response.ts";
 import type { ViewBuilder } from "./view.ts";
@@ -28,16 +28,18 @@ export interface InitViewsBuilderReturn<Globals extends object> {
 		<View extends ViewRender<any, any>>(
 			view: View,
 			...args: ExtractViewArgs<View>
-		): void;
+		): Promise<void>;
 
 		send: <View extends ViewRender<any, any>>(
 			view: View,
 			...args: ExtractViewArgs<View>
-		) => void;
+		) => Promise<ContextType<BotLike, "message">>;
 
 		edit: <View extends ViewRender<any, any>>(
 			view: View,
 			...args: ExtractViewArgs<View>
-		) => void;
+		) => Promise<
+			ReturnType<ContextType<BotLike, "callback_query">["editText"]>
+		>;
 	};
 }
