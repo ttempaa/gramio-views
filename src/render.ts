@@ -1,4 +1,4 @@
-import type { BotLike, Context, TelegramInputMedia } from "gramio";
+import type { BotLike, Context } from "gramio";
 import { ResponseView } from "./response.ts";
 import { isInlineMarkup, type WithResponseContext } from "./utils.ts";
 
@@ -20,17 +20,24 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 		const contextData = this.createContext(globals);
 		const result = this.render.apply(contextData, args);
 		const response = result[responseKey];
-		const { text, keyboard, media: desiredMedia } = response;
+		const { text, keyboard, media } = response;
 
 		if (
 			context.is("message") ||
 			(context.is("callback_query") && !context.message)
 		) {
-			if (desiredMedia) {
+			if (Array.isArray(media) && media.length > 1) {
+				const lastMedia = media.at(-1);
+				if (lastMedia && text) {
+					lastMedia.caption = text;
+				}
+				await context.sendMediaGroup(media);
+			} else if (media) {
+				const signleMedia = Array.isArray(media) ? media[0] : media;
 				// @ts-expect-error
 				await context.sendMedia({
-					type: desiredMedia.type,
-					[desiredMedia.type]: desiredMedia.media,
+					type: signleMedia.type,
+					[signleMedia.type]: signleMedia.media,
 					caption: text,
 					reply_markup: keyboard,
 				});
@@ -44,33 +51,41 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 		}
 
 		if (context.is("callback_query") && context.message) {
-			const isCurrentMedia = context.message.hasAttachment();
-			const isDesiredMedia = !!desiredMedia;
+			if (Array.isArray(media)) {
+				await context.message.delete();
+				await context.sendMediaGroup(media);
+				return;
+			}
 
-			if (isCurrentMedia && !isDesiredMedia && text) {
+			const hasCurrentMedia = context.message.hasAttachment();
+			const hasDesiredMedia = !!media;
+
+			if (hasCurrentMedia && !hasDesiredMedia && text) {
 				await context.message.delete();
 				await context.send(text, { reply_markup: keyboard });
 				return;
 			}
 
-			if (isDesiredMedia) {
-				const media: TelegramInputMedia = {
-					type: desiredMedia.type,
-					media: desiredMedia.media,
-					caption: text,
-				};
+			if (hasDesiredMedia) {
 				const inlineMarkup = isInlineMarkup(keyboard) ? keyboard : undefined;
-				await context.editMedia(media, { reply_markup: inlineMarkup });
+				await context.editMedia(
+					{
+						type: media.type,
+						media: media.media,
+						caption: text,
+					},
+					{ reply_markup: inlineMarkup },
+				);
 				return;
 			}
 
-			if (!isCurrentMedia && text) {
+			if (!hasCurrentMedia && text) {
 				const inlineMarkup = isInlineMarkup(keyboard) ? keyboard : undefined;
 				await context.editText(text, { reply_markup: inlineMarkup });
 				return;
 			}
 
-			if (keyboard && !text && !desiredMedia) {
+			if (keyboard && !text && !media) {
 				const inlineMarkup = isInlineMarkup(keyboard) ? keyboard : undefined;
 				await context.editReplyMarkup(inlineMarkup);
 				return;
