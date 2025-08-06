@@ -85,6 +85,10 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 		}
 
 		if (Array.isArray(media)) {
+			const lastMedia = media.at(-1);
+			if (lastMedia && text) {
+				lastMedia.caption = text;
+			}
 			await context.message.delete();
 			await context.sendMediaGroup(media);
 			return;
