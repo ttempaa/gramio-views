@@ -1,4 +1,9 @@
-import type { BotLike, Context, TelegramInlineKeyboardMarkup } from "gramio";
+import type {
+	BotLike,
+	Context,
+	ContextType,
+	TelegramInlineKeyboardMarkup,
+} from "gramio";
 import type { ViewRender } from "./render.ts";
 import type { ResponseView } from "./response.ts";
 import type { ViewBuilder } from "./view.ts";
