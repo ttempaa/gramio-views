@@ -24,10 +24,24 @@ export interface InitViewsBuilderReturn<Globals extends object> {
 	buildRender: (
 		context: Context<BotLike>,
 		globals: Globals,
-	) => <View extends ViewRender<any, any>>(
-		view: View,
-		...args: ExtractViewArgs<View>
-	) => void;
+	) => {
+		<View extends ViewRender<any, any>>(
+			view: View,
+			...args: ExtractViewArgs<View>
+		): Promise<void>;
+
+		send: <View extends ViewRender<any, any>>(
+			view: View,
+			...args: ExtractViewArgs<View>
+		) => Promise<ContextType<BotLike, "message">>;
+
+		edit: <View extends ViewRender<any, any>>(
+			view: View,
+			...args: ExtractViewArgs<View>
+		) => Promise<
+			ReturnType<ContextType<BotLike, "callback_query">["editText"]>
+		>;
+	};
 }
 
 export function isInlineMarkup(

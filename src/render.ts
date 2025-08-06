@@ -1,4 +1,4 @@
-import type { BotLike, Context } from "gramio";
+import type { BotLike, ContextType } from "gramio";
 import { ResponseView } from "./response.ts";
 import { isInlineMarkup, type WithResponseContext } from "./utils.ts";
 
@@ -13,9 +13,10 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 	) {}
 
 	async renderWithContext(
-		context: Context<BotLike>,
+		context: ContextType<BotLike, "message" | "callback_query">,
 		globals: Globals,
 		args: Args,
+		strategyRaw?: "send" | "edit",
 	) {
 		const contextData = this.createContext(globals);
 		const result = this.render.apply(contextData, args);
@@ -44,6 +45,7 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 			} else if (text) {
 				await context.send(text, { reply_markup: keyboard });
 			}
+
 			if (context.is("callback_query")) {
 				await context.answer();
 			}
