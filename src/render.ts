@@ -1,4 +1,4 @@
-import type { BotLike, ContextType } from "gramio";
+import type { BotLike, ContextType, MaybePromise } from "gramio";
 import { ResponseView } from "./response.ts";
 import { isInlineMarkup, type WithResponseContext } from "./utils.ts";
 
@@ -9,7 +9,7 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 		private readonly render: (
 			this: WithResponseContext<Globals>,
 			...args: Args
-		) => ResponseView,
+		) => MaybePromise<ResponseView>,
 	) {}
 
 	async renderWithContext(
@@ -19,7 +19,7 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 		strategyRaw?: "send" | "edit",
 	) {
 		const contextData = this.createContext(globals);
-		const result = this.render.apply(contextData, args);
+		const result = await this.render.apply(contextData, args);
 		const response = result[responseKey];
 
 		const canEdit = context.is("callback_query") && !!context.message;
