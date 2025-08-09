@@ -89,8 +89,10 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 			if (lastMedia && text) {
 				lastMedia.caption = text;
 			}
-			await context.message.delete();
-			await context.sendMediaGroup(media);
+			await Promise.all([
+				context.message.delete(),
+				context.sendMediaGroup(media),
+			]);
 			return;
 		}
 
@@ -98,8 +100,10 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 		const hasDesiredMedia = !!media;
 
 		if (hasCurrentMedia && !hasDesiredMedia && text) {
-			await context.message.delete();
-			await context.send(text, { reply_markup: keyboard });
+			await Promise.all([
+				context.message.delete(),
+				context.send(text, { reply_markup: keyboard }),
+			]);
 			return;
 		}
 
