@@ -10,19 +10,19 @@ const onlyMessageView = defineView().render(function () {
 			new InlineKeyboard()
 				.columns(1)
 				.text("Message with text only ›", "TEXT")
-				.text("Message with signle media ›", "MEDIA")
+				.text("Message with single media ›", "MEDIA")
 				.text("Message with media group ›", "MEDIA_GROUP"),
 		);
 });
 
-const signleMediaView = defineView().render(async function () {
+const singleMediaView = defineView().render(async function () {
 	return this.response
-		.text("Message with signle media.")
+		.text("Message with single media.")
 		.keyboard(
 			new InlineKeyboard()
 				.columns(1)
 				.text("Message with text only ›", "TEXT")
-				.text("Message with signle media ›", "MEDIA")
+				.text("Message with single media ›", "MEDIA")
 				.text("Message with media group ›", "MEDIA_GROUP"),
 		)
 		.media(
@@ -48,7 +48,7 @@ const bot = new Bot(process.env.BOT_TOKEN!)
 		return context.render(onlyMessageView);
 	})
 	.command("media", async (context) => {
-		return context.render(signleMediaView);
+		return context.render(singleMediaView);
 	})
 	.command("media_group", async (context) => {
 		return context.render(mediaGroupView);
@@ -58,7 +58,7 @@ const bot = new Bot(process.env.BOT_TOKEN!)
 			return context.render(onlyMessageView);
 		}
 		if (context.queryPayload === "MEDIA") {
-			return context.render(signleMediaView);
+			return context.render(singleMediaView);
 		}
 		if (context.queryPayload === "MEDIA_GROUP") {
 			return context.render(mediaGroupView);

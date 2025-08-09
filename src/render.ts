@@ -61,11 +61,11 @@ export class ViewRender<Globals extends object, Args extends any[]> {
 			}
 			await context.sendMediaGroup(media);
 		} else if (media) {
-			const signleMedia = Array.isArray(media) ? media[0] : media;
+			const singleMedia = Array.isArray(media) ? media[0] : media;
 			// @ts-expect-error
 			await context.sendMedia({
-				type: signleMedia.type,
-				[signleMedia.type]: signleMedia.media,
+				type: singleMedia.type,
+				[singleMedia.type]: singleMedia.media,
 				caption: text,
 				reply_markup: keyboard,
 			});
