@@ -5,7 +5,7 @@ const defineView = initViewsBuilder();
 
 const onlyMessageView = defineView().render(function () {
 	return this.response
-		.text(`Only message. Current timestamp: ${Date.now()}`)
+		.text(`Only message. Current timestamp: ${new Date().toISOString()}`)
 		.keyboard(
 			new InlineKeyboard()
 				.columns(1)
@@ -35,7 +35,7 @@ const mediaGroupView = defineView().render(async function () {
 		.text("Message with media group. Buttons is not allowed.")
 		.media([
 			MediaInput.photo(await MediaUpload.url("https://picsum.photos/500")),
-			MediaInput.photo(await MediaUpload.url("https://picsum.photos/500")),
+			MediaInput.photo("https://picsum.photos/500"),
 			MediaInput.photo(await MediaUpload.url("https://picsum.photos/500")),
 		]);
 });
@@ -53,16 +53,15 @@ const bot = new Bot(process.env.BOT_TOKEN!)
 	.command("media_group", async (context) => {
 		return context.render(mediaGroupView);
 	})
-	.on("callback_query", async (context) => {
-		if (context.queryPayload === "TEXT") {
-			return context.render(onlyMessageView);
-		}
-		if (context.queryPayload === "MEDIA") {
-			return context.render(singleMediaView);
-		}
-		if (context.queryPayload === "MEDIA_GROUP") {
-			return context.render(mediaGroupView);
-		}
-	});
+	.callbackQuery("TEXT", async (context) => {
+		return context.render(onlyMessageView);
+	})
+	.callbackQuery("MEDIA", async (context) => {
+		return context.render(singleMediaView);
+	})
+	.callbackQuery("MEDIA_GROUP", async (context) => {
+		return context.render(mediaGroupView);
+	})
+	.onStart(console.log);
 
 bot.start();
