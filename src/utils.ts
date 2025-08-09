@@ -50,12 +50,12 @@ export interface InitViewsBuilderReturn<Globals extends object> {
 }
 
 export function isInlineMarkup(
-	markup: any,
+	markup: unknown,
 ): markup is TelegramInlineKeyboardMarkup {
 	if (!markup || typeof markup !== "object") {
 		return false;
 	}
-	if (typeof markup.toJSON === "function") {
+	if ("toJSON" in markup && typeof markup.toJSON === "function") {
 		const json = markup.toJSON();
 		return "inline_keyboard" in json;
 	}
